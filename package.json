@@ -33,5 +33,8 @@
       "data/*",
       "public/*"
     ]
+  },
+  "engines": {
+    "node": "16.x"
   }
 }

@@ -15,7 +15,7 @@ const imagePath = path.join(__dirname, "public/place.png");
 
 const initialColor = { r: 255, g: 255, b: 255, alpha: 1 };
 
-const rateLimit = 0;
+const rateLimit = 50;
 
 const getInitialArray = async (width: number, height: number) => {
   if (fs.existsSync(imagePath)) {
@@ -101,7 +101,7 @@ async function main() {
     });
   });
 
-  server.listen(8080);
+  server.listen(process.env.PORT || 8080);
 }
 
 main();

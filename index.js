@@ -24,7 +24,7 @@ const height = 1024;
 const start_date = new Date().toLocaleString();
 const imagePath = path_1.default.join(__dirname, "public/place.png");
 const initialColor = { r: 255, g: 255, b: 255, alpha: 1 };
-const rateLimit = 0;
+const rateLimit = 50;
 const getInitialArray = (width, height) => __awaiter(void 0, void 0, void 0, function* () {
     if (fs_1.default.existsSync(imagePath)) {
         const image = yield (0, sharp_1.default)(imagePath).ensureAlpha().raw().toBuffer();
@@ -103,7 +103,7 @@ function main() {
                 }));
             });
         });
-        server.listen(8080);
+        server.listen(process.env.PORT || 8080);
     });
 }
 main();
