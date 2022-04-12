@@ -86,6 +86,7 @@ async function main() {
             socket.disconnect(true);
           }
         }
+
         lastTimestamp = timestamp;
         // console.log("Recieved pixel: ", pixel, " Timestamp: ", timestamp);
         const [x, y, r, g, b] = pixel;
