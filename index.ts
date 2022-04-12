@@ -9,6 +9,8 @@ import sharp from "sharp";
 const width = 1024;
 const height = 1024;
 
+const start_date = new Date().toLocaleString();
+
 const imagePath = path.join(__dirname, "public/place.png");
 
 const initialColor = { r: 255, g: 255, b: 255, alpha: 1 };
@@ -66,6 +68,10 @@ async function main() {
 
   server.register(fastifyStatic, {
     root: path.join(__dirname, "public"),
+  });
+
+  server.get("/", (req, res) => {
+    res.send("Up since " + start_date);
   });
 
   server.ready().then(() => {
