@@ -54,6 +54,10 @@ async function main() {
   const canvasArray = await getInitialArray(width, height);
   await downloadImage(canvasArray);
 
+  setInterval(async () => {
+    await downloadImage(canvasArray);
+  }, 1000);
+
   const server = fastify();
 
   server.register(fastifyCors, {
@@ -95,7 +99,6 @@ async function main() {
         canvasArray[index + 1] = g;
         canvasArray[index + 2] = b;
         canvasArray[index + 3] = 255;
-        await downloadImage(canvasArray);
         socket.broadcast.emit("pixel", pixel);
       });
     });
