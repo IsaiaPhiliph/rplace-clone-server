@@ -46,11 +46,11 @@ async function downloadImage(canvasArray: Buffer | Uint8ClampedArray) {
     },
   });
   await image.toFile(imagePath);
-  // console.log("Downloaded image");
 }
 
 async function main() {
   const canvasArray = await getInitialArray(width, height);
+
   await downloadImage(canvasArray);
 
   setInterval(async () => {
@@ -106,14 +106,23 @@ async function main() {
       socket.on("pixel", async (pixel) => {
         // console.log("Recieved pixel: ", pixel, " Timestamp: ", timestamp);
         try {
-          await rateLimiter.consume(socket.handshake.address);
+          await rateLimiter.consume(
+            socket.handshake.headers["x-real-ip"] as string
+          );
           const [x, y, r, g, b] = pixel;
           const index = (width * y + x) * 4;
-          canvasArray[index] = r;
-          canvasArray[index + 1] = g;
-          canvasArray[index + 2] = b;
-          canvasArray[index + 3] = 255;
-          socket.broadcast.emit("pixel", pixel);
+
+          const original_r = canvasArray[index];
+          const original_g = canvasArray[index + 1];
+          const original_b = canvasArray[index + 2];
+
+          if (original_r !== r || original_g !== g || original_b !== b) {
+            canvasArray[index] = r;
+            canvasArray[index + 1] = g;
+            canvasArray[index + 2] = b;
+            canvasArray[index + 3] = 255;
+            socket.broadcast.emit("pixel", pixel);
+          }
         } catch (rejRes) {
           socket.disconnect(true);
         }
