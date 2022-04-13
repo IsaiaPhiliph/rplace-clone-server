@@ -16,7 +16,7 @@ const imagePath = path.join(__dirname, "public/place.png");
 
 const initialColor = { r: 255, g: 255, b: 255, alpha: 1 };
 
-const getInitialArray = async (width: number, height: number) => {
+async function getInitialArray(width: number, height: number) {
   if (fs.existsSync(imagePath)) {
     const image = await sharp(imagePath).ensureAlpha().raw().toBuffer();
     return new Uint8ClampedArray(image);
@@ -35,7 +35,7 @@ const getInitialArray = async (width: number, height: number) => {
       .toBuffer();
     return blankImage;
   }
-};
+}
 
 async function downloadImage(canvasArray: Buffer | Uint8ClampedArray) {
   const image = sharp(canvasArray, {
@@ -80,6 +80,24 @@ async function main() {
 
   server.get("/", (req, res) => {
     res.send("Up since " + start_date);
+  });
+
+  server.get("/connected-clients", (req, res) => {
+    const sockets: {
+      socket_id: string;
+      client_ip_address: string;
+      connected_on: string;
+    }[] = [];
+    server.io.sockets.sockets.forEach((socket) => {
+      sockets.push({
+        socket_id: socket.id,
+        client_ip_address: socket.handshake.address,
+        connected_on: socket.handshake.time,
+      });
+    });
+    const count = sockets.length;
+
+    res.send({ count, sockets });
   });
 
   server.ready().then(() => {
