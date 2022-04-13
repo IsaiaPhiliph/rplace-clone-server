@@ -85,13 +85,13 @@ async function main() {
   server.get("/connected-clients", (req, res) => {
     const sockets: {
       socket_id: string;
-      client_ip_address: string;
+      client_ip_address: string|undefined;
       connected_on: string;
     }[] = [];
     server.io.sockets.sockets.forEach((socket) => {
       sockets.push({
         socket_id: socket.id,
-        client_ip_address: socket.handshake.address,
+        client_ip_address: socket.handshake.headers["x-real-ip"] as string,
         connected_on: socket.handshake.time,
       });
     });
