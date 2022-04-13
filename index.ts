@@ -105,10 +105,12 @@ async function main() {
       console.log("Client connected to socket: ", socket.id);
       socket.on("pixel", async (pixel) => {
         // console.log("Recieved pixel: ", pixel, " Timestamp: ", timestamp);
+
         try {
-          await rateLimiter.consume(
-            socket.handshake.headers["x-real-ip"] as string
-          );
+          // await rateLimiter.consume(
+          //   (socket.handshake.headers["x-real-ip"] as string) ||
+          //     socket.handshake.address
+          // );
           const [x, y, r, g, b] = pixel;
           const index = (width * y + x) * 4;
 
