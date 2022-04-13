@@ -85,7 +85,7 @@ async function main() {
   server.get("/connected-clients", (req, res) => {
     const sockets: {
       socket_id: string;
-      client_ip_address: string|undefined;
+      client_ip_address: string | undefined;
       connected_on: string;
     }[] = [];
     server.io.sockets.sockets.forEach((socket) => {
