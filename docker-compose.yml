@@ -6,7 +6,7 @@ services:
       - npm_default
     pull_policy: build
     volumes:
-      - data:public
+      - data:/usr/src/app/public
 
 networks:
   npm_default:
