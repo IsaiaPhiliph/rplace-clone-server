@@ -16,6 +16,8 @@ const imagePath = path.join(__dirname, "public/place.png");
 
 const initialColor = { r: 255, g: 255, b: 255, alpha: 1 };
 
+let lastChange = new Date();
+
 async function getInitialArray(width: number, height: number) {
   if (fs.existsSync(imagePath)) {
     const image = await sharp(imagePath).ensureAlpha().raw().toBuffer();
@@ -54,7 +56,13 @@ async function main() {
   await downloadImage(canvasArray);
 
   setInterval(async () => {
-    await downloadImage(canvasArray);
+    const now = new Date();
+    const needsToUpdate = now.getTime() - lastChange.getTime() < 1000;
+
+    if (needsToUpdate) {
+      console.log("Updating local image");
+      await downloadImage(canvasArray);
+    }
   }, 1000);
 
   const rateLimiter = new RateLimiterMemory({
@@ -123,11 +131,15 @@ async function main() {
             canvasArray[index + 1] = g;
             canvasArray[index + 2] = b;
             canvasArray[index + 3] = 255;
+            lastChange = new Date();
             socket.broadcast.emit("pixel", pixel);
           }
         } catch (rejRes) {
           socket.disconnect(true);
         }
+      });
+      socket.on("disconnect", () => {
+        console.log("Client disconnected from socket: ", socket.id);
       });
     });
   });
