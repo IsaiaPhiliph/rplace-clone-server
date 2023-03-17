@@ -12,11 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cors": "^8.2.1",
+    "@fastify/static": "^6.9.0",
     "canvas": "^2.9.1",
-    "fastify": "^3.28.0",
-    "fastify-cors": "^6.0.3",
-    "fastify-socket.io": "^3.0.0",
-    "fastify-static": "^4.6.1",
+    "fastify": "^4.14.1",
+    "fastify-socket.io": "^4.0.0",
     "jimp": "^0.16.1",
     "pngjs2": "^2.0.0",
     "rate-limiter-flexible": "^2.3.6",
@@ -24,8 +24,10 @@
     "socket.io": "^4.4.1"
   },
   "devDependencies": {
+    "@types/node": "^18.15.3",
     "@types/pngjs2": "^2.0.30",
     "@types/sharp": "^0.30.1",
+    "nodemon": "^2.0.21",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   },
@@ -34,8 +36,5 @@
       "data/*",
       "public/*"
     ]
-  },
-  "engines": {
-    "node": "16.x"
   }
 }

@@ -1,11 +1,11 @@
 import fastify from "fastify";
-import fastifyCors from "fastify-cors";
 import fastifyIO from "fastify-socket.io";
 import fs from "fs";
 import path from "path";
-import fastifyStatic from "fastify-static";
 import sharp from "sharp";
 import { RateLimiterMemory } from "rate-limiter-flexible";
+import { fastifyCors } from "@fastify/cors";
+import { fastifyStatic } from "@fastify/static";
 
 const width = 1024;
 const height = 1024;
@@ -101,6 +101,8 @@ async function main() {
   });
 
   server.ready().then(() => {
+    console.log(`Server listening on http://localhost:${port}`);
+
     server.io.on("connection", (socket) => {
       console.log("Client connected to socket: ", socket.id);
       socket.on("pixel", async (pixel) => {
@@ -130,7 +132,11 @@ async function main() {
     });
   });
 
-  server.listen(process.env.PORT || 8080);
+  const port = Number(process.env.PORT) || 8080;
+
+  server.listen({
+    port,
+  });
 }
 
 main();
