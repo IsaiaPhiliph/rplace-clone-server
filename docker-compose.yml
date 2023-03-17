@@ -4,7 +4,13 @@ services:
     restart: unless-stopped
     networks:
       - npm_default
+    pull_policy: build
+    volumes:
+      - data:public
 
 networks:
   npm_default:
     external: true
+
+volumes:
+  - data
